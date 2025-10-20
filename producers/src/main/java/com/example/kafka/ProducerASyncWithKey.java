@@ -23,7 +23,7 @@ public class ProducerASyncWithKey {
         // value.serializer
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        // topic 생성 : kafka-topics --bootstrap-server localhost:9092 --create --topic simple-topic
+        // topic 생성 : kafka-topics --bootstrap-server localhost:9092 --create --topic pizza-topic --partitions 3
         // kafka-console-consumer --bootstrap-server localhost:9092 --topic simple-topic
         String topicName = "multipart-topic";
 
