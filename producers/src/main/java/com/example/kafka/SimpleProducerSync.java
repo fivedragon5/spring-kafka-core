@@ -3,11 +3,18 @@ package com.example.kafka;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
-public class SimpleProducer {
+public class SimpleProducerSync {
+
+    public static final Logger logger = LoggerFactory.getLogger(SimpleProducerSync.class);
+
     public static void main(String[] args) {
         // KafkaProducer configuration setting, Map을 사용해도 됨
         Properties props = new Properties();
@@ -26,14 +33,22 @@ public class SimpleProducer {
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
         // ProducerRecord 객체 생성
-        ProducerRecord<String, String> record = new ProducerRecord<>(topicName, "Hello, Kafka!");
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topicName, "Hello, Kafka!");
 
         // ProducerRecord 전송
-        producer.send(record);
-
-        // 리소스 정리
-        producer.flush();
-        producer.close();
-
+        try {
+            RecordMetadata recordMetadata = producer.send(producerRecord).get();
+            logger.info("\n ####### record metadata received #######");
+            logger.info("partition:" + recordMetadata.partition());
+            logger.info("offset:" + recordMetadata.offset());
+            logger.info("timestamp:" + recordMetadata.timestamp());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            producer.flush();
+            producer.close();
+        }
     }
 }
