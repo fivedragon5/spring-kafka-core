@@ -17,15 +17,8 @@ public class SimpleConsumer {
     private static final Logger logger = LoggerFactory.getLogger(SimpleConsumer.class);
 
     public static void main(String[] args) {
-
-        Properties props = new Properties();
-        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
-
         String topicName = "simple-topic";
-        KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
+        KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(consumerProps());
         kafkaConsumer.subscribe(List.of(topicName));
 
         while (true) {
