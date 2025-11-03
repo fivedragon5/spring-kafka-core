@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Kafka clients
+    implementation "org.apache.kafka:kafka-clients:3.9.1"
+
+    // Slf4j
+    implementation "org.slf4j:slf4j-api:2.0.17"
+    implementation "org.slf4j:slf4j-log4j12:2.0.17"
+
+    // data-faker
+    implementation "net.datafaker:datafaker:2.5.2"
+}
+
+test {
+    useJUnitPlatform()
+}
