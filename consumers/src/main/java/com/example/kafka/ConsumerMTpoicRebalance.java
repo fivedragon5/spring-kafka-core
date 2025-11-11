@@ -13,15 +13,13 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
-public class ConsumerWakeup {
+public class ConsumerMTpoicRebalance {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerWakeup.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsumerMTpoicRebalance.class);
 
     public static void main(String[] args) {
-        String topicName = "pizza-topic";
-
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(consumerProps());
-        kafkaConsumer.subscribe(List.of(topicName));
+        kafkaConsumer.subscribe(List.of("topic-p3-t1", "topic-p3-t2"));
 
         // mainThread 참조
         Thread mainThread = Thread.currentThread();
@@ -42,8 +40,8 @@ public class ConsumerWakeup {
             while (true) {
                 ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, String> record : consumerRecords) {
-                    logger.info("offset : {} | key : {} | partition : {} | value : {}",
-                            record.offset(), record.key(), record.partition(), record.value());
+                    logger.info("topic: {} | offset : {} | key : {} | partition : {} | value : {}",
+                            record.topic(), record.offset(), record.key(), record.partition(), record.value());
                 }
             }
         } catch (WakeupException e) {
@@ -59,7 +57,7 @@ public class ConsumerWakeup {
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group-mtopic");
         return props;
     }
 }

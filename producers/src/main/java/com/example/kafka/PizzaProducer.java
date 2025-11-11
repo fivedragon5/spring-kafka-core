@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 public class PizzaProducer {
 
     // kafka-topics --bootstrap-server localhost:9092 --create --topic pizza-topic --partitions 3
-
     public static final Logger logger = LoggerFactory.getLogger(PizzaProducer.class);
 
     public static void main(String[] args) {
@@ -27,9 +26,9 @@ public class PizzaProducer {
         props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        props.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "6");
-        props.setProperty(ProducerConfig.ACKS_CONFIG, "0");
-        props.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+//        props.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "6");
+//        props.setProperty(ProducerConfig.ACKS_CONFIG, "0");
+//        props.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
 
         String topicName = "pizza-topic";
 
@@ -37,7 +36,7 @@ public class PizzaProducer {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
 
         // 피자 메시지 전송
-        sendPizzaMessage(kafkaProducer, topicName, -1, 100, 100, 1000, false);
+        sendPizzaMessage(kafkaProducer, topicName, -1, 1000, 0, 0, true);
         kafkaProducer.close();
     }
 
